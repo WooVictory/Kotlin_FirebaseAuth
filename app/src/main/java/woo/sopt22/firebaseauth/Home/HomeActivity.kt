@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.EditText
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
 import woo.sopt22.firebaseauth.R
@@ -16,6 +17,8 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v!!){
             logoutBtn->{
+                // 로그아웃을 하면 페이스북 세션이 자동으로 지워지게 된다.
+                LoginManager.getInstance().logOut()
                 FirebaseAuth.getInstance().signOut()
                 finish()
             }
@@ -26,7 +29,36 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 sendEmailVerification()
             }
             changeIdBtn->{
+                changeIdDialog()
+            }
+            deleteBtn->{
+                deleteId()
+            }
+        }
+    }
 
+    fun deleteIdDialog(){
+        var alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("알림")
+        alertDialog.setMessage("삭제하시겠습니까?")
+        alertDialog.setPositiveButton("확인",{dialog, which ->
+            deleteId()
+        })
+        alertDialog.setNegativeButton("취소",{dialog, which ->
+
+        })
+        alertDialog.show()
+    }
+
+    fun deleteId(){
+        FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                FirebaseAuth.getInstance().signOut()
+                LoginManager.getInstance().logOut()
+                ToastMaker.makeShortToast(this,"아이디 삭제가 완료되습니다.")
+                finish()
+            } else{
+                ToastMaker.makeShortToast(this,task.exception.toString())
             }
         }
     }
@@ -113,5 +145,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         changePwBtn.setOnClickListener(this)
         checkEmailBtn.setOnClickListener(this)
         changeIdBtn.setOnClickListener(this)
+        deleteBtn.setOnClickListener(this)
     }
 }

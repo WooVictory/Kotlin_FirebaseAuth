@@ -5,10 +5,15 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,11 +33,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, FindPasswordActivity::class.java))
             }
 
-
         }
     }
 
     var authStateListener : FirebaseAuth.AuthStateListener?=null
+    var callbackManager : CallbackManager?=null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +48,41 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         signBtn.setOnClickListener(this)
         findPasswordBtn.setOnClickListener(this)
         //googleLoginBtn.setOnClickListener(this)
+
+        // 페이스북 로그인이 완료되었을 때 토큰을 받는 부
+        callbackManager = CallbackManager.Factory.create()
+
+        facebookBtn.setReadPermissions("email","public_profile")
+        facebookBtn.registerCallback(callbackManager, object : FacebookCallback<LoginResult>{
+            override fun onSuccess(result: LoginResult?) {
+                /*FIXME
+                * 성공된 값이 이쪽으로 넘어와서
+                * 이것을 파이어베이스에 페이스북 아이디를 입력하게 됩니다.
+                * */
+
+                // 로그인 성공시 발급된 인증서
+
+                var credentail = FacebookAuthProvider.getCredential(result!!.accessToken.token)
+                FirebaseAuth.getInstance().signInWithCredential(credentail)
+                        .addOnCompleteListener { task ->
+                            if(task.isSuccessful){
+                                ToastMaker.makeShortToast(this@MainActivity,"페이스북 연동이 성공하였습니다. ")
+                            } else{
+                                ToastMaker.makeShortToast(this@MainActivity,task.exception.toString())
+                            }
+                        }
+            }
+
+            override fun onCancel() {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onError(error: FacebookException?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
+
 
         // 로그인 세션을 체크하는 부분입니다.
         authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
@@ -72,6 +113,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     }
+
+
     fun createEmailId(){
         /*FIXME
         * addOnCompleteListener를 통해서 결과값을 받아옵니다.
@@ -119,6 +162,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+
+
+        callbackManager!!.onActivityResult(requestCode, resultCode,data)
+
+        // 페이스북 로그인이 성공했을 경우 결과값이 이쪽으로 넘어오기 때문에(onActivityResult)
+        // 넘어온 값을 callbackManager에 넘겨줘서 이 넘겨진 값을 onSuccess 부분에 값을 넘겨줍니다.
+
+
+
         if(requestCode == 1 && resultCode == Activity.RESULT_OK){
             // 선택한 아이디에 대한 정보를 가져옵니다.
             /*FIXME
