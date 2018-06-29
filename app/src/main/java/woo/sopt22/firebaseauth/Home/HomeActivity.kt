@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
 import woo.sopt22.firebaseauth.Database.DatabaseActivity
 import woo.sopt22.firebaseauth.R
+import woo.sopt22.firebaseauth.StorageActivity
 import woo.sopt22.firebaseauth.Util.ToastMaker
 import java.net.PasswordAuthentication
 
@@ -38,6 +39,9 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
             }
             databaseBtn->{
                 startActivity(Intent(this, DatabaseActivity::class.java))
+            }
+            storageBtn->{
+                startActivity(Intent(this, StorageActivity::class.java))
             }
         }
     }
@@ -152,5 +156,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         changeIdBtn.setOnClickListener(this)
         deleteBtn.setOnClickListener(this)
         databaseBtn.setOnClickListener(this)
+        storageBtn.setOnClickListener(this)
     }
 }

@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -44,7 +45,8 @@
         코드 복사
         <activity android:name=".Database.DatabaseActivity" />
         <activity android:name=".Database.DatabaseCreateActivity" />
-        <activity android:name=".Database.ReadDatabaseActivity"></activity>
+        <activity android:name=".Database.ReadDatabaseActivity" />
+        <activity android:name=".StorageActivity"></activity>
     </application>
 
 </manifest>
