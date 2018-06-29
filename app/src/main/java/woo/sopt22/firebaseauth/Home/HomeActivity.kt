@@ -1,6 +1,7 @@
 package woo.sopt22.firebaseauth.Home
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
@@ -9,6 +10,7 @@ import android.widget.EditText
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_home.*
+import woo.sopt22.firebaseauth.Database.DatabaseActivity
 import woo.sopt22.firebaseauth.R
 import woo.sopt22.firebaseauth.Util.ToastMaker
 import java.net.PasswordAuthentication
@@ -32,7 +34,10 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
                 changeIdDialog()
             }
             deleteBtn->{
-                deleteId()
+                deleteIdDialog()
+            }
+            databaseBtn->{
+                startActivity(Intent(this, DatabaseActivity::class.java))
             }
         }
     }
@@ -146,5 +151,6 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener {
         checkEmailBtn.setOnClickListener(this)
         changeIdBtn.setOnClickListener(this)
         deleteBtn.setOnClickListener(this)
+        databaseBtn.setOnClickListener(this)
     }
 }
