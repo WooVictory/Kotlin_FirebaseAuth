@@ -5,11 +5,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Database.ReadDatabaseActivity">
+    tools:context=".Database.ReadDatabaseActivity"
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Read RecyclerView"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"/>
+    
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        
+        <Spinner
+            android:entries="@array/city"
+            android:id="@+id/read_database_spinner_city"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"></Spinner>
+
+        <Spinner
+            android:entries="@array/age"
+            android:id="@+id/read_database_spinner_age"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"></Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대 이상"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/read_database_activity_editText"
+        android:layout_width="200dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerviewReadDatabase"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Realtime Read RecyclerView"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerviewReadDatabase_Realtime"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
